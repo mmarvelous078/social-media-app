@@ -13,6 +13,7 @@ from .forms import CreateUserForm, ThreadsContentForm
 
 from django.contrib.auth.decorators import login_required
 
+import random
 
 # AUTHENTIOCATION AND AUTHORIZATIONS -------------------------------------------------------------AUTHENTIOCATION AND AUTHORIZATIONS-----------------------------------------------------------
 def registerPage(request):
@@ -61,19 +62,35 @@ def logoutUser(request):
 
 @login_required(login_url='core:login')
 def index(request):
-    posts = ThreadsContent.objects.order_by('-timestamp')
+    # Fetching a random set of users
+    random_users = random.sample(list(Profile.objects.all()), 5)
+
+    # Fetching posts for each selected user
+    all_posts = []
+    for user in random_users:
+        user_posts = ThreadsContent.objects.filter(user=user)[:4]
+        all_posts.extend(user_posts)
+
+    
+    # Shuffle the combined list of posts
+    posts = list(all_posts)
+    random.shuffle(posts)
+
+    # getting current user's profile picture
     user = request.user.id
     profile = Profile.objects.get(user=user)
     profImg = profile.profile_picture.url
 
+    # getting all the posts liked by the current user
     liking = LikesFor_Main_Post.objects.filter(user=profile).values_list('tweet', flat=True)
 
+    # getting the like counts for each post to be displayed frontend
     like_counts = {}
     for post in posts:
         like_count = LikesFor_Main_Post.objects.filter(tweet=post).count()
         like_counts[post.id] = like_count
 
-    context = {'posts':posts, 'liking':liking, 'like_counts' : like_counts, 'currentUserProfImg':profImg}
+    context = {'posts':posts[:15], 'liking':liking, 'like_counts' : like_counts, 'currentUserProfImg':profImg}
 
     return render(request,'core/index.html', context)
 

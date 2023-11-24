@@ -1,9 +1,3 @@
-document.getElementById('AI').addEventListener('click', ()=>{
-    let desc = document.getElementById('aiDesc')
-    desc.classList.toggle('DescAl')
-})
-
-
 const openButtons = document.querySelectorAll('.threeDotsButton')
 const modal = document.getElementById('options')
 
