@@ -1,0 +1,257 @@
+{% load static %}
+<div id="repliesOuterContainer">
+    <div id="repliesHeader">
+        <div id="notch"></div>
+        <span>Thoughts</span>
+    </div>
+    <div id="underlineReplies"></div>
+
+    <div id="allContentReplies">
+
+    </div>
+
+    <div id="ReplyInputContainer">
+        <div id="senderReplyImg">
+            <img src="{{currentUserProfImg}}">
+        </div>
+
+        <form id="ReplyInputForm" action='/sendReply/' method='post' enctype="text/plain">
+            {% csrf_token %}
+
+            <input type="text" name="replyText" id="ReplyInput" placeholder="what's yor thought about this post...">
+            <button type="submit">send</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const allContentReplies = document.getElementById('allContentReplies')
+    const replybtns = document.querySelectorAll('.replybtns')
+    const notch = document.getElementById('notch')
+    const repliesView = document.getElementById('repliesOuterContainer')
+    // declaration the post id that will be used to retrieve or send data to the post with the assigned id
+    let postId;
+
+
+    // Function for handling reply like functionality
+    function LkBtns (){
+        const ReplyLikeBtns = document.querySelectorAll('.ReplyLikeBtns');
+        
+        let reply_Id
+
+        ReplyLikeBtns.forEach(
+            btn => {
+                btn.addEventListener('click', ()=>{
+                    console.log('LikeBtnClicked')
+                    reply_Id = btn.getAttribute('replyId')
+
+                    let xhrLike = new XMLHttpRequest();
+                    xhrLike.open('GET',`likeReply/${reply_Id}`, true);
+                    xhrLike.onreadystatechange = () =>{
+                        if(xhrLike.readyState === XMLHttpRequest.DONE) {
+                            if(xhrLike.status === 200){
+                                let replyLikeCount = JSON.parse(xhrLike.responseText)
+                                
+
+                                if(replyLikeCount.userlikedThis === true){
+                                    btn.src = "{% static 'svg/heart-solid.svg' %}"
+                                }else {
+                                    btn.src = "{% static 'svg/heart-regular.svg' %}"
+                                }
+                                
+                                btn.nextElementSibling.innerHTML = replyLikeCount.likesForThisReplyCount
+
+                            } else {
+                                console.error('Error', xhrLike.status, xhrLike.statusText)
+                            };
+                        };
+                    };
+                    xhrLike.send();
+                });
+            }
+        );
+    }
+    // end function
+
+
+
+    notch.addEventListener('click', ()=>{
+        repliesView.style.height = "0"
+        setTimeout(()=>{
+            repliesView.style.display = "none" 
+        },450)
+        
+        allContentReplies.innerHTML = ''
+    })
+
+    replybtns.forEach(
+        btn => {
+            btn.addEventListener('click', ()=>{
+                
+                repliesView.style.height = "60%"
+                repliesView.style.display = "block"
+
+                // getting the current btn's post id
+                postId = btn.getAttribute('postIdAll')
+
+                
+
+                
+                
+                // Replies Getter
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', `main_replies/${postId}`, true);
+                xhr.onreadystatechange = () => {
+                    if(xhr.readyState === XMLHttpRequest.DONE){
+                        if(xhr.status === 200){
+                            var response = JSON.parse(xhr.responseText)
+                            //console.log(response.replies)
+                            const repliesData = response.replies
+
+                            for(const reply of repliesData) {
+                                const replyContainerIndv = document.createElement('div')
+                                replyContainerIndv.className = 'replyContainerIndv'
+                            
+
+                                const replyAuthorProfileImg = document.createElement('div')
+                                replyAuthorProfileImg.className = 'replyAuthorProfileImg'
+                                
+                                const replyAuthorProfileImgSrc = document.createElement('img')
+                                replyAuthorProfileImgSrc.src = reply.authorProfile
+                                replyAuthorProfileImg.appendChild(replyAuthorProfileImgSrc)
+                                
+                                const replyContents = document.createElement('div')
+                                replyContents.className = 'replyContents'
+
+                                const replyAuthorUsername = document.createElement('span')
+                                replyAuthorUsername.innerText = reply.author
+
+                                const replyContentParagraph = document.createElement('p')
+                                replyContentParagraph.innerText = reply.reply
+
+                                const ReplylikeIconContainer = document.createElement('div')
+                                ReplylikeIconContainer.className = 'ReplylikeIconContainer'
+
+                                const ReplylikeIconImg = document.createElement('img')
+                                ReplylikeIconImg.className = 'ReplyLikeBtns'
+
+
+                                if (reply.currentUserLikedThisPost) {
+                                    ReplylikeIconImg.src = "{% static 'svg/heart-solid.svg' %}"
+                                } else {
+                                    ReplylikeIconImg.src = "{% static 'svg/heart-regular.svg' %}"
+                                }
+
+                                ReplylikeIconImg.setAttribute('replyId', reply.replyid)
+
+                                const ReplyLikesCount = document.createElement('span')
+                                ReplyLikesCount.innerText = reply.replyLikesCount
+
+                                replyContents.appendChild(replyAuthorUsername)
+                                replyContents.appendChild(replyContentParagraph)
+                                ReplylikeIconContainer.appendChild(ReplylikeIconImg)
+                                ReplylikeIconContainer.appendChild(ReplyLikesCount)
+
+                                replyContainerIndv.appendChild(replyAuthorProfileImg)
+                                replyContainerIndv.appendChild(replyContents)
+                                replyContainerIndv.appendChild(ReplylikeIconContainer)
+                            
+                                allContentReplies.appendChild(replyContainerIndv)
+                            }
+
+                            // calling the fuction for reply like btns
+                            LkBtns()
+
+                        
+                        } else {
+                            console.error('Error', xhr.status)
+                        }
+                    }
+                }
+                xhr.send()
+            })
+            // replies getter end
+        }
+    )
+
+
+    
+
+    // Fuction that sends replies for the reply form 
+    document.getElementById('ReplyInputForm').addEventListener('submit', (event)=>{
+        event.preventDefault()
+
+        let formName = document.querySelector('#ReplyInputForm');
+
+        let contentText = document.querySelector('input[name="replyText"]').value;
+        if(contentText.trim() === '') {
+            alert("Can't submit blank reply.");
+            return;
+        }
+
+        let formData = new FormData(formName);
+
+        let xhrReply = new XMLHttpRequest();
+        xhrReply.open('POST', `/sendReply/${postId}`, true)
+        console.log(postId)
+        xhrReply.onreadystatechange = () => {
+            if(xhrReply.readyState === XMLHttpRequest.DONE) {
+                if(xhrReply.status === 200){
+                    let responseR = JSON.parse(xhrReply.responseText)
+                    console.log('Reply was sent successful');
+
+
+
+
+
+                    
+
+                    // Appending the just send reply to all aother replies
+                    const replyContainerIndv = document.createElement('div')
+                    replyContainerIndv.className = 'replyContainerIndv'
+                
+
+                    const replyAuthorProfileImg = document.createElement('div')
+                    replyAuthorProfileImg.className = 'replyAuthorProfileImg'
+                    
+                    const replyAuthorProfileImgSrc = document.createElement('img')
+                    replyAuthorProfileImgSrc.src = '{{currentUserProfImg}}'
+                    replyAuthorProfileImg.appendChild(replyAuthorProfileImgSrc)
+                    
+                    const replyContents = document.createElement('div')
+                    replyContents.className = 'replyContents'
+
+                    const replyAuthorUsername = document.createElement('span')
+                    replyAuthorUsername.innerText = '{{request.user.username}}'
+
+                    const replyContentParagraph = document.createElement('p')
+                    replyContentParagraph.innerText = contentText
+
+                    const ReplylikeIconContainer = document.createElement('div')
+                    ReplylikeIconContainer.className = 'ReplylikeIconContainer'
+
+                            
+                    replyContents.appendChild(replyAuthorUsername)
+                    replyContents.appendChild(replyContentParagraph)
+
+                    replyContainerIndv.appendChild(replyAuthorProfileImg)
+                    replyContainerIndv.appendChild(replyContents)
+                
+                    allContentReplies.insertBefore(replyContainerIndv, allContentReplies.firstChild)
+
+                    // end append
+
+
+
+
+
+                    // clearing the input box value after sending text contents
+                    document.getElementById('ReplyInput').value = ''
+                } else {
+                    console.error('Error', xhrReply.status, xhrReply.statusText);
+                }
+            }
+        };
+        xhrReply.send(formData);
+    });
+</script>

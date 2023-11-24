@@ -1,0 +1,45 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="authentication_container">
+    <div class="logForm">
+        <div style="width: 25px; height: 25px;
+        border: 5px solid rgb(155 217 70);
+        border-radius: 15px;display: flex;align-items: center;
+        justify-content: center;"></div>
+    </div>
+    <div class="auth_container_inner">
+
+        <h2>
+            Register
+        </h2>
+        <form class="id_registration_form" method="post">
+            {% csrf_token %}
+
+            {{form.username}}
+        
+            {{form.email}}
+        
+            {{form.password1}}
+        
+            {{form.password2}}
+            
+            <input class="submitRegisterForm" type="submit" value="Register">
+        </form>
+        {{form.errors}}
+        <p>You already have an account? <a href="{% url 'core:login' %}">login</a></p>
+    </div>
+</div>
+
+<script>
+    var form_fields = document.getElementsByTagName('input')
+
+    form_fields[1].placeholder = 'Username..';
+    form_fields[2].placeholder = 'Email';
+    form_fields[3].placeholder = 'Enter password...';
+    form_fields[4].placeholder = 'Re-enter Password...';
+
+</script>
+{% endblock content %}

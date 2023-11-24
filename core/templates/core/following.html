@@ -1,0 +1,95 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block content %}
+    <nav id="followViewNav">
+        <div id="arrowAndusername">
+            <a onclick="goBack()" style="text-decoration: none;color: black;"  href="#"><span id="arrowLeft">&Longleftarrow;</span></a>
+
+            <span id="navUsername">{{user.user.username}}</span>
+
+            {% if user.verified %}
+                <img src="{% static 'svg/verified.png' %}" width="12px">                                
+            {% endif %}
+        </div>      
+    </nav>
+
+    <div id="followersHeader">
+        <span>Following</span>
+    </div>
+    <div id="container-underlinerFollowers">
+        <div id="underlinerFollowers"></div>
+    </div>
+
+    <div id="followersFeedView">
+        {% for profile in following_byUser %}
+            <div class="followers-Contaner">
+                <div class="userProfImg">
+                    <img src="{{profile.followed.profile_picture.url}}">
+                </div>
+                <div class="userProfInfo">
+                    <span>{{profile.followed.user.username}}</span>
+                    <span>{{profile.followed.user.first_name}} {{profile.followed.user.last_name}}</span>
+                </div>
+
+                <div class="follow-btns">
+                {% if profile.followed.user != request.user %}
+
+                    {% if profile.followed.id in following %}
+                        <a href="#" class="Actualfollowingbtns follBtns" userId="{{profile.followed.user.id}}">Following</a>
+                    {% else %}
+                        <a href="#" class="Actualfollowbtns follBtns" userId="{{profile.followed.user.id}}">Follow</a>
+                    {% endif %}
+
+                {% endif %}
+                </div>
+            </div>          
+        {% endfor %}
+        <form id="csrf_tokenCont" style="display: none;">
+            {% csrf_token %}
+        </form>
+    </div>
+
+    {% include "core/Nav.html" %}
+
+    <script>
+        const follBtns = document.querySelectorAll('.follBtns');
+        const csrf = document.getElementById('csrf_tokenCont').getElementsByTagName('input')[0].value;
+
+
+        const goBack = ()=>{
+            window.history.back()
+        }
+
+        follBtns.forEach(
+            btn=>{
+                btn.addEventListener('click',()=>{
+                    let postID = btn.getAttribute('userId');
+                    
+                    let xhr = new XMLHttpRequest();
+                    xhr.open('POST', `massfollow/${postID}`, true);
+                    xhr.setRequestHeader('X-CSRFToken', csrf);
+                    xhr.onreadystatechange = ()=>{
+                        if(xhr.readyState === XMLHttpRequest.DONE){
+                            if(xhr.status === 200){
+                                let response = JSON.parse(xhr.responseText);
+                                if (response.is_Following) {
+                                    btn.classList.remove('Actualfollowbtns')
+                                    btn.classList.add('Actualfollowingbtns')
+                                    btn.innerHTML = 'Following'
+                                } else {
+                                    btn.classList.remove('Actualfollowingbtns')
+                                    btn.classList.add('Actualfollowbtns')
+                                    btn.innerHTML = 'Follow'
+                                };
+                            } else {
+                                console.error('Error', xhr.status, xhr.statusText);
+                            };
+                        };
+                    };
+                    xhr.send();
+                });
+            }
+        );
+    </script>
+{% endblock content %}

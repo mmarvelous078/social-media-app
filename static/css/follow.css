@@ -1,0 +1,118 @@
+.app #followViewNav{
+    padding: 20px 0;
+    width: 100%;
+    box-shadow: 5px 5px 20px rgba(0,0,0,0.06);
+    display: flex;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 990;
+    background-color: #dde2d0;
+}
+
+.app #followViewNav #arrowAndusername {
+    padding: 0 20px;
+}
+
+.app #followViewNav #arrowAndusername #arrowLeft {
+    margin-right: 10px;
+    font-weight: 600;
+}
+
+.app #followViewNav #arrowAndusername #navUsername {
+    font-weight: 600;
+}
+
+.app #followersHeader {
+    margin: 20px 0;
+    margin-top: 30px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.app #followersHeader span{
+    font-weight: bold;
+    color: rgb(75, 75, 75);
+}
+
+.app #container-underlinerFollowers{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.app #container-underlinerFollowers #underlinerFollowers {
+    width: 75%;
+    height: 1px;
+    background-color: rgb(137, 137, 137);
+}
+
+.app #followersFeedView {
+    width: 100%;
+    height: 79%;
+    overflow-y: scroll;
+}
+.app #followersFeedView::-webkit-scrollbar{
+    display: none;
+}
+
+.app #followersFeedView .followers-Contaner {
+    display: flex;
+    flex-direction: row;
+    padding: 15px 25px;
+    position: relative;
+}
+
+.app #followersFeedView .followers-Contaner .userProfImg img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.app #followersFeedView .followers-Contaner .userProfInfo {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-left: 15px;
+}
+
+.app #followersFeedView .followers-Contaner .userProfInfo span:first-child {
+    font-size: 15px;
+    color: rgb(45, 45, 45);
+    font-weight: 600;
+}
+
+.app #followersFeedView .followers-Contaner .userProfInfo span:last-child {
+    font-size: 13px;
+    color: rgb(82, 82, 82);
+}
+
+.app #followersFeedView .followers-Contaner .follow-btns {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 30px;
+    top: 25px;
+}
+
+.app #followersFeedView .followers-Contaner .follow-btns .Actualfollowingbtns {
+    color: rgb(50, 50, 50);
+    background-color: rgb(214, 219, 223);
+    padding: 8px 20px;
+    text-decoration: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+}
+.app #followersFeedView .followers-Contaner .follow-btns .Actualfollowbtns {
+    color: rgb(236, 236, 236);
+    background-color: #158bbe;
+    padding: 8px 20px;
+    text-decoration: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+}

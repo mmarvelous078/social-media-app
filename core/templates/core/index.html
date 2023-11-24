@@ -1,0 +1,103 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+
+    <div class="frontContainer">
+
+        {% include "core/Header.html" %}
+        
+        <div class="feed">
+            {% for post in posts %}
+                <div class="post-container">
+                    <div class="profile-img">
+                        <img src="{{post.user.profile_picture.url}}">
+                    </div>
+                    <div class="post-contents">
+                        <div class="post-contents-ownerdata">
+                            <div style="display: inline-block;">
+                                
+                                
+                                <a href="{% url 'core:posterprofile' post.user.user.id %}" style="text-decoration: none; color: black;"><p class="post-owner-username">{{post.user.user.username}}</p></a>
+
+
+                                {% if post.user.verified %}
+                                    <img src="static/svg/verified.png" width="12px">                                
+                                {% endif %}
+                            </div>
+                            <div id="post-right-side">
+                                <span id="dateposted">{{post.timestamp}}</span>
+                                <span style="font-weight: bolder; font-size: large;cursor: pointer;" postIdAll="{{ post.id }}" class="threeDotsButton">...</span>
+
+                            </div>
+                        </div>
+
+                        <div id="post-content-middle">
+                            <p class="post-content">{{post.content}}</p>
+
+                            {% if post.content_img %}
+                                <div class="post-image-container">
+                                    
+                                        <a href="#"><img src="{{post.content_img.url}}" class="post-image"></a>
+                                </div>
+                            {% endif %}
+                            {% if post.content_video %}
+                                <div class="post-video-container">
+                                    <video class="post-video" controls autoplay muted> 
+                                        <source src="{{post.content_video.url}}">
+                                    </video>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="button-controls">
+                            {% if post.id not in liking %}
+                                <a href="#" postIdAll="{{ post.id }}" class="likebtns" >
+                                    <img id="likeIconImge{{post.id}}" src="static/svg/heart-regular.svg">
+                                </a>
+                            {% else %}
+                                <a href="#" postIdAll="{{ post.id }}" class="likebtns" >
+                                    <img id="likeIconImge{{post.id}}" src="static/svg/heart-solid.svg">
+                                </a>
+                            {% endif %}
+
+                            <a href="#" postIdAll="{{ post.id }}" class="replybtns"><img src="static/svg/comment-regular.svg"></a>
+
+                            <a href=""><img src="static/svg/share-from-square-regular.svg"></a>
+                        </div>
+
+                        <div class="meta-data"><span></span><span id="likeCountSpan{{post.id}}" style="color: rgba(154, 154, 154, 0.972);">{{ like_counts|get_item:post.id }} likes</span></div>
+
+                    </div>
+                </div>
+                {% comment %} line seperator {% endcomment %}
+                <div style="height: 0.2px; width: 100%;" class="line-post"></div>
+
+
+                {% comment %} <p>{{post.content}}</p>
+                <hr>
+                <a href="{% url 'core:likepost' post.id %}">Like - {{post.no_of_likes}}</a> {% endcomment %}
+
+                {% comment %} options {% endcomment %}              
+            {% endfor %} 
+        </div>
+
+        {% comment %} options {% endcomment %}
+        
+        {% comment %} mute block options etc {% endcomment %}
+        <div class="options" id="options">
+            <a href="">Not interested in this post</a>
+            <hr>
+            <a id="follow-username" href="" style="display: block;">Follow @{{post.user.user.username}}</a>
+            <a id="mute-username" href="" style="display: block;">Mute @{{post.user.user.username}}</a>
+            <a id="block-username" href="" style="display: block;">Block @{{post.user.user.username}}</a>
+            <hr>
+            <a href="">Report post</a>
+            <button class="close" style="outline: none; background-color: bisque;color: black; border-radius: 10px;cursor: pointer;">Close</button>
+        </div>
+        
+        {% include "core/replies.html" %}
+    </div>
+    {% include "core/Nav.html" %}
+{% endblock content %}

@@ -1,0 +1,228 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+
+    {% if request.user.id == poster.user.id %}
+        <form id="csrf-form" style="display: none;">
+            {% csrf_token %}
+        </form>
+        
+        <div id="confirmDeletionModal" class="hidden">
+            <p>Are you sure you want to delete this post?</p>
+            <div>
+                <button id='AbortDeletionModal'>Abort</button>
+                <button id='ConfirmDeletionModal'>Delete</button>
+            </div>
+        </div>
+    {% endif %}
+
+    <nav id="posterProfileNav">
+
+        <div id="arrowAndusername">
+            <a onclick="goBack()" style="text-decoration: none;color: black;"  href="#"><span id="arrowLeft">&Longleftarrow;</span></a>
+
+            <span id="navUsername">{{poster.user.username}}</span>
+
+            {% if poster.verified %}
+                <img src="{% static 'svg/verified.png' %}" width="12px">                                
+            {% endif %}
+        </div>
+
+        <div id="bellAndOptions">
+            {% comment %} <img style="width: 20px;padding: 0;margin-right: 10px;" src="{% static 'images/bell-line-icon.png' %}"> {% endcomment %}
+            <img style="width: 20px;padding: 0;margin-right: 20px;margin-bottom: 3px;" src="{% static 'images/three-horizontal-lines-Icon.png' %}">
+        </div>
+    </nav>
+
+    <div id="ProfilePostsWindow">
+
+        <div id="undeNav">
+            
+            <div class="profile-image" style="margin-right: 30px;">
+                <img style="width: 60px;height: 60px;" src="{{poster.profile_picture.url}}">
+            </div>
+
+            <div id="dataCountProfileContainer">
+                <div class="rightSideProfile" id="posts-count">
+                    <span>{{userPostsCount}}</span>
+                    <span>posts</span>
+                </div>
+
+                <a style="color: black;text-decoration: none;" href="{% url 'core:viewfollowers' poster.user.id %}">
+                    <div class="rightSideProfile" id="followers-count">
+                        <span id="followersCountDisplay">{{followersCount}}</span>
+                        <span>Followers</span>
+                    </div>
+                </a>
+
+                <a style="color: black;text-decoration: none;" href="{% url 'core:viewfollowing' poster.user.id %}">
+                    <div class="rightSideProfile" id="following-count">
+                        <span id="followingCountDisplay">{{followingCount}}</span>
+                        <span>Following</span>                
+                    </div>
+                </a>
+
+            </div>
+
+        </div>
+
+        <div id="secondSectionUnderNav">
+            <div id="fullname">
+                <p>{{poster.user.first_name}} {{poster.user.last_name}}</p>
+            </div>
+
+            <div id="bio">
+                <p>{{poster.bio}}</p>
+
+                <div id="location">
+                    <span style="margin: 0;padding: 0;margin-left: 5px;color: black;font-weight: bold;">Location - </span>
+                    <span style="color: #5b5534;">{{poster.location}}</span>
+                </div>
+            </div>
+        </div>
+        
+        <div id="followCont" class="underBiobuttons">
+            {% if request.user.id == poster.user.id %}
+                <button class="messagebtn" style="margin-right: 10px;">Edit profile</button>
+                <a href="{% url 'core:logout' %}"><button class="messagebtn">Log Out</button></a>
+            
+            {% else %}
+                {% if is_Following %}
+                    <button id="followBtn" class="toggle-follow-btn followingProfilebtn" profileId="{{poster.id}}">Following</button>
+                {%else %}
+                    <button id="followBtn" class="toggle-follow-btn" profileId="{{poster.id}}">Follow</button>
+                {% endif %}
+                <button class="messagebtn">Message</button>
+
+            {% endif %}
+        </div>
+
+        <br>
+
+        
+            {% for post in posts %}
+
+                <div class="ProfilePostsContainer">
+                    {% if post.content_img %}
+                        <img width="50%" src="{{post.content_img.url}}">
+                    {% endif %}
+
+                    {% if post.content_video %}
+                        <video width="50%" controls autoplay muted> 
+                            <source src="{{post.content_video.url}}">
+                        </video>
+                    {% endif %}
+
+                    <div id="profilePostRightsideData">
+                        {% if request.user.id == poster.user.id %}
+                            <div class="deleteButtonModal" id="deleteButtonModal{{post.id}}">
+                                <span class="ClickDeleteButtons" postId="{{post.id}}" id="clickDeleteBtn{{post.id}}">Delete</span>
+                                <button class="AbortDeleteBtn" id="AbortDeleteBtn{{post.id}}">Close</button>
+                            </div>
+                        {% endif %}
+
+                        <div class="postContent-p">
+
+                            {% if request.user.id == poster.user.id %}
+                                <div class="delete_option_button">
+                                    <a class="deletePostBtns" id="deletePostBtn{{post.id}}" postId="{{post.id}}" href="#">...</a>
+                                </div>
+                            {% endif %}
+
+                            <p>{{post.content}}</p> 
+                        </div>
+
+                        <div class="RepliesPostProfile">
+                            <span style="font-weight: bold;display: block; font-size: 13px;">marvel:</span>
+                            <span style="margin-left: 6px;font-size: 10px;">You look amazing ngl</span>
+                            <hr>
+                            <span style="font-weight: bold;display: block;font-size: 13px;">John1:</span>
+                            <span style="margin-left: 6px;font-size: 10px;">Looking good</span>
+                            <hr>
+                            <span style="font-weight: bold;display: block;font-size: 13px;">Maria:</span>
+                            <span style="margin-left: 6px;font-size: 10px;">Goddess</span>
+                        </div>
+
+                        <div class="likeComentShareBtns">
+                            {% if post.id not in liking %}
+                                <a href="#" postIdProfile="{{ post.id }}" class="likebtnsProfile" >
+                                    <img id="likeIconImgeProfile{{post.id}}" src="{% static 'svg/heart-regular.svg' %}">
+                                </a>
+                            {% else %}
+                                <a href="#" postIdProfile="{{ post.id }}" class="likebtnsProfile" >
+                                    <img id="likeIconImgeProfile{{post.id}}" src="{% static 'svg/heart-solid.svg' %}">
+                                </a>
+                            {% endif %}
+
+                            <span id="likeCountSpanProfile{{post.id}}" >{{ like_counts|get_item:post.id }}</span>
+                            <img src="{% static 'svg/comment-regular.svg' %}">
+                            <span>0</span>
+                            <img src="{% static 'svg/share-from-square-regular.svg' %}">
+                            <span>2</span>
+                        </div>
+                    </div>
+                </div>
+
+            {% endfor %}
+        {% include "core/Nav.html" %}
+    </div>
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+
+
+        const likebtnsProfile = document.querySelectorAll('.likebtnsProfile');
+
+        likebtnsProfile.forEach(
+            btn => {
+                btn.addEventListener('click',()=> {
+                    let postId = btn.getAttribute('postIdProfile')
+                    const likeUpdater = document.getElementById(`likeCountSpanProfile${postId}`)
+
+
+
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('GET',`/likepost/${Number(postId)}`, true);
+                    xhr.onreadystatechange = () => {
+                        if(xhr.readyState === XMLHttpRequest.DONE){
+                            if(xhr.status === 200) {
+                                var response = JSON.parse(xhr.responseText);
+                                var data = response
+
+                                likeUpdater.innerHTML = `${data.likes}`
+
+                                if(data.is_liking === true) {
+                                    var lkicon = document.getElementById(`likeIconImgeProfile${postId}`)
+                                    lkicon.src = "{% static 'svg/heart-solid.svg' %}"
+                
+                                } else {
+                                    var lkicon = document.getElementById(`likeIconImgeProfile${postId}`)
+                                    lkicon.src = "{% static 'svg/heart-regular.svg' %}"
+
+                                }
+
+                            } else {
+                                console.error('Error', xhr.status);
+                            }
+                        }
+                    }
+                    xhr.send()
+                });
+            
+            }
+        )
+
+    </script>
+{% endblock content %}
+
+{% block deletePostJs %}
+    <script src="{% static 'js/deletePost.js' %}"></script>
+{% endblock deletePostJs %}
+
+{% block jsFollowRequest %}
+    <script src="{% static 'js/followingSystem.js' %}"></script>
+{% endblock jsFollowRequest %}

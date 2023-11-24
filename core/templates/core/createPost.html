@@ -1,0 +1,35 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+    <nav id="postNav">
+        <a href="/">X</a>
+        <span>New Post</span>
+    </nav>
+    <hr>
+
+    <div class="postingContainer">
+        <div class="profileImageContanainer">
+            <img src="{{posterProf.profile_picture.url}}">
+        </div>
+        <div class="postDetailsContainer">
+            <span>{{user.username}}</span>
+            <div class="formContainer">
+                <form id="contentUploadForm" action="/createPost/" method="post" enctype="multipart/form-data">
+
+                    {% csrf_token %}
+            
+                    <input type="text" name="content" id="contentInput" placeholder="What's in your mind?...">
+                    <input type="file" name="contentImage">
+                    <button id="postButton" type="submit">Post</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    {% include "core/Nav.html" %}
+{% endblock content %}
+
+{% block postUpload %}
+    <script src="{% static 'js/postUploadSystem.js' %}"></script>
+{% endblock postUpload %}

@@ -1,0 +1,33 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="authentication_container">
+    <div class="logForm">
+        <div style="width: 25px; height: 25px;
+        border: 5px solid rgb(155 217 70);
+        border-radius: 15px;display: flex;align-items: center;
+        justify-content: center;"></div>
+    </div>
+    <div class="auth_container_inner">
+
+        <h2>
+            Login
+        </h2>
+        <form class="id_registration_form" method="post">
+            {% csrf_token %}
+
+            <input type="text" name='username' placeholder="Username...">
+            <input type="password" name="password" placeholder="Password...">
+            <input class="submitRegisterForm" type="submit" value="Login">
+        </form>
+        
+        {% for message in messages %}
+            <p id="usercreatedMessage">{{message}}</p>
+        {% endfor %}
+
+        <p>You don't have an account? <a href="{% url 'core:register' %}">Register</a></p>
+    </div>
+</div>
+{% endblock content %}
