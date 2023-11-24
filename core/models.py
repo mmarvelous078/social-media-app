@@ -16,7 +16,7 @@ class Profile(models.Model):
         return self.user.username
 
 class ThreadsContent(models.Model):
-    content = models.TextField()
+    content = models.TextField(blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     content_img = models.ImageField(upload_to='content_images/', blank=True, null=True)

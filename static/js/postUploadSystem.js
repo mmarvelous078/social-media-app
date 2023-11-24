@@ -6,7 +6,7 @@ document.getElementById('contentUploadForm').addEventListener('submit', (event)=
     let contentText = document.querySelector('input[name="content"]').value;
     let contentImage = document.querySelector('input[name="contentImage"]').files[0];
 
-    if(contentText.trim() === '' && !contentImage) {
+    if(contentText.trim() === '' || !contentImage) {
         alert('Please provide a title and select an Image.');
         return;
     }

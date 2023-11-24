@@ -118,8 +118,18 @@ def createPost(request):
         if content and content_img:
             post = ThreadsContent(content=content, content_img=content_img, user=creator_Prof)
             post.save()
-
             return JsonResponse({'message':'Upload successful.'})
+
+        if content or content_img:
+            if content:
+                post = ThreadsContent(content=content, user=creator_Prof)
+                post.save()
+                return JsonResponse({'message':'Upload successful.'})
+
+            elif content_img:
+                post = ThreadsContent(content_img=content_img, user=creator_Prof)                
+                post.save()
+                return JsonResponse({'message':'Upload successful.'})
         else:
             return JsonResponse({'message':'Title and image are required.'})
 

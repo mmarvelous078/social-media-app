@@ -99,23 +99,16 @@
             {% endif %}
         </div>
 
-        <br>
 
-        
-            {% for post in posts %}
+            <div class="ProfilePostsContainer">
+                {% for post in posts %}
+                    <div class="innerPostContainers">
+                        {% if post.content_img %}
+                            <div class="innerPostImageCont">
+                                <img src="{{post.content_img.url}}">
+                            </div>
+                        {% endif %}
 
-                <div class="ProfilePostsContainer">
-                    {% if post.content_img %}
-                        <img width="50%" src="{{post.content_img.url}}">
-                    {% endif %}
-
-                    {% if post.content_video %}
-                        <video width="50%" controls autoplay muted> 
-                            <source src="{{post.content_video.url}}">
-                        </video>
-                    {% endif %}
-
-                    <div id="profilePostRightsideData">
                         {% if request.user.id == poster.user.id %}
                             <div class="deleteButtonModal" id="deleteButtonModal{{post.id}}">
                                 <span class="ClickDeleteButtons" postId="{{post.id}}" id="clickDeleteBtn{{post.id}}">Delete</span>
@@ -123,27 +116,13 @@
                             </div>
                         {% endif %}
 
-                        <div class="postContent-p">
 
-                            {% if request.user.id == poster.user.id %}
-                                <div class="delete_option_button">
-                                    <a class="deletePostBtns" id="deletePostBtn{{post.id}}" postId="{{post.id}}" href="#">...</a>
-                                </div>
-                            {% endif %}
+                        {% if request.user.id == poster.user.id %}
+                            <div class="delete_option_button">
+                                <a class="deletePostBtns" id="deletePostBtn{{post.id}}" postId="{{post.id}}">&acd;</a>
+                            </div>
+                        {% endif %}
 
-                            <p>{{post.content}}</p> 
-                        </div>
-
-                        <div class="RepliesPostProfile">
-                            <span style="font-weight: bold;display: block; font-size: 13px;">marvel:</span>
-                            <span style="margin-left: 6px;font-size: 10px;">You look amazing ngl</span>
-                            <hr>
-                            <span style="font-weight: bold;display: block;font-size: 13px;">John1:</span>
-                            <span style="margin-left: 6px;font-size: 10px;">Looking good</span>
-                            <hr>
-                            <span style="font-weight: bold;display: block;font-size: 13px;">Maria:</span>
-                            <span style="margin-left: 6px;font-size: 10px;">Goddess</span>
-                        </div>
 
                         <div class="likeComentShareBtns">
                             {% if post.id not in liking %}
@@ -163,9 +142,8 @@
                             <span>2</span>
                         </div>
                     </div>
-                </div>
-
-            {% endfor %}
+                {% endfor %}
+            </div>
         {% include "core/Nav.html" %}
     </div>
 
