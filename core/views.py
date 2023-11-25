@@ -200,6 +200,12 @@ def posterProfile(request, pk):
         like_count = LikesFor_Main_Post.objects.filter(tweet=post).count()
         like_counts[post.id] = like_count        
 
+    # counting comments/replies for each post
+    comment_counts = {}
+    for pst in poster_owned_posts:
+        comment_count = Replies.objects.filter(thread=pst).count()
+        comment_counts[pst.id] = comment_count
+
     # counting all instances where given user is being followed
     followersCount = FollowersManager.objects.filter(followed=poster).count()
     # counting all instances where given user is following someone
@@ -207,6 +213,10 @@ def posterProfile(request, pk):
 
     liking = LikesFor_Main_Post.objects.filter(user=current_user_profile).values_list('tweet', flat=True)
 
+    # getting current user's profile picture
+    user = request.user.id
+    profile = Profile.objects.get(user=user)
+    profImg = profile.profile_picture.url
 
     context = {
         'poster': poster,
@@ -215,10 +225,12 @@ def posterProfile(request, pk):
         'followersCount':followersCount,
         'followingCount':followingCount,
         'like_counts' : like_counts,
+        'comment_counts': comment_counts,
         'liking': liking,
-        'userPostsCount': poster_owned_posts_count
+        'userPostsCount': poster_owned_posts_count,
+        'currentUserProfImg':profImg
         }
-
+        
     return render(request, 'core/posterProfile.html', context)
 
 # Likes and follows ---------------------------------------------------------------------------Likes and follows-----------------------------------------
@@ -278,6 +290,8 @@ def follow_or_unfollow(request, prof_id):
 
     return JsonResponse(data)
 
+# function for following users displayed from a specific account's following or followers
+@login_required(login_url='core:login')
 def massfollow(request, prof_id):
     user = request.user.id 
     profile = Profile.objects.get(user=user)
@@ -303,6 +317,7 @@ def massfollow(request, prof_id):
 
     return JsonResponse(data)
 
+@login_required(login_url='core:login')
 def following_view_page(request, user_id):
     user = User.objects.get(id=user_id)
     profile = Profile.objects.get(user=user)
@@ -320,6 +335,7 @@ def following_view_page(request, user_id):
 
     return render(request, 'core/following.html', context)
 
+@login_required(login_url='core:login')
 def followers_view_page(request, user_id):
     user = User.objects.get(id=user_id)
     profile = Profile.objects.get(user=user)
@@ -380,13 +396,14 @@ def sendReply(request, post_id):
     if request.method == 'POST':
         content = request.POST.get('replyText')
         
-        print(content)
         
         if content :
             reply = Replies(reply=content, user=profile, thread=thread)
             reply.save()
 
-            return JsonResponse({'responseMsg': "Reply Sent"})
+            replycounts = Replies.objects.filter(thread=thread).count()
+
+            return JsonResponse({'replycounts':replycounts})
         else:
             return JsonResponse({'responseMsg': "Can't upload bank reply"})
 

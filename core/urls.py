@@ -30,8 +30,10 @@ urlpatterns = [
 
     # ***********************************************************************Comments or Replies
     path('main_replies/<int:post_id>', views.main_replies, name='main_replies'),
+    path('posterProfile/main_replies/<int:post_id>', views.main_replies, name='main_replies'),
     path('sendReply/<int:post_id>', views.sendReply, name='sendReply'),
     path('likeReply/<int:reply_id>', views.likeReply, name='likeReply'),
+    path('posterProfile/likeReply/<int:reply_id>', views.likeReply, name='likeReply'),
 
     #***********************************************************************home modal options
     path('home/options/<int:pk>', views.HomeOptions, name='homeoptions')

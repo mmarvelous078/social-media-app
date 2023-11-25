@@ -488,15 +488,17 @@ nav .navbar a img {
 .app .ProfilePostsContainer .innerPostContainers .likeComentShareBtns {
     padding: 5px;
     width: 88%;
-    margin-left: 20px;
-    margin-top: 8px;
+    /* margin-left: 20px;
+    margin-top: 8px; */
     border-radius: 5px;
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
     position: absolute;
-    bottom: 0;
+    bottom: 5px;
     right: 5px;
+    background-color: #bfbfbf93;
+    padding-bottom: 3px;
 }
 
 .app .ProfilePostsContainer .innerPostContainers .likeComentShareBtns img{

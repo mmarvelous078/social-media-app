@@ -15,7 +15,7 @@
             <img src="{{currentUserProfImg}}">
         </div>
 
-        <form id="ReplyInputForm" action='/sendReply/' method='post' enctype="text/plain">
+        <form id="ReplyInputForm" action='/sendReply/' autocomplete="off" method='post' enctype="text/plain">
             {% csrf_token %}
 
             <input type="text" name="replyText" id="ReplyInput" placeholder="what's yor thought about this post...">
@@ -29,6 +29,7 @@
     const replybtns = document.querySelectorAll('.replybtns')
     const notch = document.getElementById('notch')
     const repliesView = document.getElementById('repliesOuterContainer')
+
     // declaration the post id that will be used to retrieve or send data to the post with the assigned id
     let postId;
 
@@ -42,7 +43,6 @@
         ReplyLikeBtns.forEach(
             btn => {
                 btn.addEventListener('click', ()=>{
-                    console.log('LikeBtnClicked')
                     reply_Id = btn.getAttribute('replyId')
 
                     let xhrLike = new XMLHttpRequest();
@@ -94,10 +94,6 @@
                 // getting the current btn's post id
                 postId = btn.getAttribute('postIdAll')
 
-                
-
-                
-                
                 // Replies Getter
                 var xhr = new XMLHttpRequest();
                 xhr.open('GET', `main_replies/${postId}`, true);
@@ -174,9 +170,6 @@
         }
     )
 
-
-    
-
     // Fuction that sends replies for the reply form 
     document.getElementById('ReplyInputForm').addEventListener('submit', (event)=>{
         event.preventDefault()
@@ -193,18 +186,17 @@
 
         let xhrReply = new XMLHttpRequest();
         xhrReply.open('POST', `/sendReply/${postId}`, true)
-        console.log(postId)
+
         xhrReply.onreadystatechange = () => {
             if(xhrReply.readyState === XMLHttpRequest.DONE) {
                 if(xhrReply.status === 200){
                     let responseR = JSON.parse(xhrReply.responseText)
-                    console.log('Reply was sent successful');
 
-
-
-
-
-                    
+                    if(window.location.pathname.includes('/posterProfile')){
+                        const commentCountSpanProfile = document.getElementById(`commentCountSpanProfile${postId}`);
+                        commentCountSpanProfile.innerHTML = responseR.replycounts
+                        console.log(responseR.replycounts)
+                    }
 
                     // Appending the just send reply to all aother replies
                     const replyContainerIndv = document.createElement('div')
@@ -240,10 +232,6 @@
                     allContentReplies.insertBefore(replyContainerIndv, allContentReplies.firstChild)
 
                     // end append
-
-
-
-
 
                     // clearing the input box value after sending text contents
                     document.getElementById('ReplyInput').value = ''

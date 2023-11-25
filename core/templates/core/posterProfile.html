@@ -135,11 +135,13 @@
                                 </a>
                             {% endif %}
 
-                            <span id="likeCountSpanProfile{{post.id}}" >{{ like_counts|get_item:post.id }}</span>
-                            <img src="{% static 'svg/comment-regular.svg' %}">
-                            <span>0</span>
+                            <span id="likeCountSpanProfile{{post.id}}">{{ like_counts|get_item:post.id }}</span>
+                            
+                            <a href="#" postIdAll="{{ post.id }}" class="replybtns"><img src="{% static 'svg/comment-regular.svg' %}"></a>
+                            <span id="commentCountSpanProfile{{post.id}}">{{ comment_counts|get_item:post.id }}</span>
+
+
                             <img src="{% static 'svg/share-from-square-regular.svg' %}">
-                            <span>2</span>
                         </div>
                     </div>
                 {% endfor %}
@@ -147,6 +149,7 @@
         {% include "core/Nav.html" %}
     </div>
 
+    {% include "core/replies.html" %}
     <script>
         function goBack() {
             window.history.back();
@@ -195,6 +198,7 @@
         )
 
     </script>
+
 {% endblock content %}
 
 {% block deletePostJs %}
