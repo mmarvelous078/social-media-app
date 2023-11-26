@@ -23,6 +23,8 @@ urlpatterns = [
     path('viewfollowing/<int:user_id>', views.following_view_page ,name='viewfollowing'),
     path('viewfollowers/<int:user_id>', views.followers_view_page ,name='viewfollowers'),
 
+    path('ImageFullView/<int:post_id>/<int:poster>', views.ImageFullView, name='ImageFullView'),
+
     #***********************************************************************Posts
     path('createPost/', views.createPost , name='createPost'),
     path('delete_post/<int:post_id>', views.delete_post, name='delete_post'),

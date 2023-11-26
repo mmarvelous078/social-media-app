@@ -233,6 +233,18 @@ def posterProfile(request, pk):
         
     return render(request, 'core/posterProfile.html', context)
 
+
+@login_required(login_url='core:login')
+def ImageFullView(request, post_id, poster):
+
+    post = ThreadsContent.objects.get(id=post_id, user=poster)
+
+    PostImage = post.content_img.url
+    print(PostImage)
+
+    return render(request, 'core/ImageFullView.html', {'PostImage':PostImage})
+
+
 # Likes and follows ---------------------------------------------------------------------------Likes and follows-----------------------------------------
 @login_required(login_url='core:login')
 def like_post(request, pk):

@@ -1,0 +1,92 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block content %}
+    <div id="ImageFullViewContainer" class="zoom-container">
+        <div id="inLogo" style="width: 25px; height: 25px;
+        border: 5px solid rgb(155 217 70);
+        border-radius: 15px;display: flex;align-items: center;
+        justify-content: center;">
+        </div>
+
+        <a onclick="goBack()" style="text-decoration: none;color: rgb(255, 255, 255);"  href="#"><span id="arrowLeft">&Longleftarrow;</span></a>
+        <img id="zoom-image" src="{{PostImage}}">
+    </div>
+
+    <script>
+        const goBack = ()=>{
+            window.history.back()
+        }
+
+
+        let initialPinchDistance = 0;
+        let currentPinchDistance = 0;
+        let scale = 1;
+        let lastTapTime = 0;
+
+        const zoomContainer = document.querySelector('.zoom-container');
+        const zoomImage = document.getElementById('zoom-image');
+
+        zoomContainer.addEventListener('touchstart', handleTouchStart);
+        zoomContainer.addEventListener('touchmove', handleTouchMove);
+        zoomContainer.addEventListener('touchend', handleTouchEnd);
+
+        function handleTouchStart(event) {
+            if (event.touches.length === 2) {
+                initialPinchDistance = Math.hypot(
+                event.touches[0].pageX - event.touches[1].pageX,
+                event.touches[0].pageY - event.touches[1].pageY
+                );
+            }
+        }
+
+        function handleTouchMove(event) {
+            if (event.touches.length === 2) {
+                currentPinchDistance = Math.hypot(
+                    event.touches[0].pageX - event.touches[1].pageX,
+                    event.touches[0].pageY - event.touches[1].pageY
+                );
+
+                const deltaPinchDistance = currentPinchDistance - initialPinchDistance;
+                scale += deltaPinchDistance * 0.01;
+
+                // Restrict scale within a specific range
+                scale = Math.min(Math.max(0.5, scale), 3);
+
+                updateZoom();
+
+                initialPinchDistance = currentPinchDistance;
+            }
+        }
+
+        document.getElementById('zoom-image').addEventListener('wheel', function (e) {
+            e.preventDefault();
+
+            scale += e.deltaY * -0.01;
+
+            // Restrict scale within a specific range
+            scale = Math.min(Math.max(0.5, scale), 3);
+
+            updateZoom();
+        });
+        
+        function handleTouchEnd(event) {
+            // Check for double tap
+            const currentTime = new Date().getTime();
+            const tapDuration = currentTime - lastTapTime;
+
+            if (tapDuration < 300 && tapDuration > 0) {
+                // Double tap detected
+                resetZoom();
+            }
+
+            lastTapTime = currentTime;
+        }
+
+        function updateZoom() {
+            const image = document.getElementById('zoom-image');
+            image.style.transform = `scale(${scale})`;
+        }
+
+    </script>
+{% endblock content %}
