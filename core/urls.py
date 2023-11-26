@@ -24,6 +24,7 @@ urlpatterns = [
     path('viewfollowers/<int:user_id>', views.followers_view_page ,name='viewfollowers'),
 
     path('ImageFullView/<int:post_id>/<int:poster>', views.ImageFullView, name='ImageFullView'),
+    path('ImageFullViewHome/<int:post_id>', views.ImageFullViewHome, name='ImageFullViewHome'),
 
     #***********************************************************************Posts
     path('createPost/', views.createPost , name='createPost'),

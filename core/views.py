@@ -245,6 +245,17 @@ def ImageFullView(request, post_id, poster):
     return render(request, 'core/ImageFullView.html', {'PostImage':PostImage})
 
 
+@login_required(login_url='core:login')
+def ImageFullViewHome(request, post_id):
+
+    post = ThreadsContent.objects.get(id=post_id)
+
+    PostImage = post.content_img.url
+    print(PostImage)
+
+    return render(request, 'core/ImageFullView.html', {'PostImage':PostImage})
+
+
 # Likes and follows ---------------------------------------------------------------------------Likes and follows-----------------------------------------
 @login_required(login_url='core:login')
 def like_post(request, pk):

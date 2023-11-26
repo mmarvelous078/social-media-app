@@ -39,7 +39,7 @@
                             {% if post.content_img %}
                                 <div class="post-image-container">
                                     
-                                        <a href="#"><img src="{{post.content_img.url}}" class="post-image"></a>
+                                        <a href="{% url 'core:ImageFullViewHome' post.id %}"><img src="{{post.content_img.url}}" class="post-image"></a>
                                 </div>
                             {% endif %}
                             {% if post.content_video %}
