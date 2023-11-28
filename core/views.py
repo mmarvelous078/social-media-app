@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse, JsonResponse
 
 from django.contrib.auth.models import User
@@ -9,7 +9,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 
 from .models import Profile,ThreadsContent , LikesFor_Main_Post, FollowersManager, Replies, Likes_for_Replies
-from .forms import CreateUserForm, ThreadsContentForm
+from .forms import CreateUserForm, ThreadsContentForm, ProfileForm
 
 from django.contrib.auth.decorators import login_required
 
@@ -24,13 +24,29 @@ def registerPage(request):
         if form.is_valid():
             form.save()
             user = form.cleaned_data.get('username')
-            messages.success(request, f'Account was created for {user}')
 
-            return redirect('core:login')
+            url = reverse('core:createProfile', kwargs={'user':user})
+            return redirect(url)
 
     context = {'form':form}
 
     return render(request, 'core/register.html', context)
+
+def createProfile(request, user):
+
+    if request.method == "POST":
+        user = User.objects.get(username=user)
+        profile_picture = request.FILES.get('profile_picture')
+        bio = request.POST.get('bio')
+        location = request.POST.get('location')
+
+        profile = Profile(user=user, bio=bio, profile_picture=profile_picture, location=location)
+        profile.save()
+        messages.success(request, f'Account was created for {user}')
+
+        return redirect('core:login')
+
+    return render(request, 'core/createProfile.html')
 
 def loginPage(request):
 
@@ -348,7 +364,6 @@ def following_view_page(request, user_id):
 
         # Retriving every account that is followed by the requested account
     following_byUser = FollowersManager.objects.filter(follower=profile)
-    print(following_byUser)
 
         # Retriving everyone that is followed by the current user
 

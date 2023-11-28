@@ -1,0 +1,57 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block content %}
+    <div id="createProfileContainer">
+        <div style="width: 40px; height: 40px;
+        border: 5px solid rgb(155 217 70);
+        border-radius: 20px;display: flex;align-items: center;
+        justify-content: center;">
+        </div>
+
+        <h2 id="headerProfCreation">Profile Creation</h2>
+        <form action="" method="post" autocomplete="off" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div id="profileImg10">
+                <img id="previewWindowProfile" src="{% static 'css/default_image.png' %}">
+                <input type="file" accept="image/*" name="profile_picture" id="id_profile_picture" onchange="previewImage(event)">
+                <span id="a_plus_sign">+</span>
+            </div>
+            <div id="profilebio10">
+                <span>Tell people about you...</span>
+                <textarea name="bio" maxlength="100" id="id_bio"></textarea>
+            </div>
+            <div id="profilelocation10">
+                <span>Your Location</span>
+                <input type="text" name="location" id="id_location" maxlength="50">
+            </div>
+            <input type="submit" value="Proceed" id="id_profile10submit">
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('a_plus_sign').addEventListener('click', ()=>{
+            document.getElementById('id_profile_picture').click();
+        });
+
+        // image preview
+        function previewImage(event) {
+            const input = event.target;
+            const preview = document.getElementById('previewWindowProfile');
+            
+            const file = input.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                };
+
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = ''; // Clear the preview if no file is selected
+            }
+        }        
+    </script>
+{% endblock content %}

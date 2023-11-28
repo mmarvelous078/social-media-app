@@ -17,8 +17,6 @@
         const goBack = ()=>{
             window.history.back()
         }
-
-
         let initialPinchDistance = 0;
         let currentPinchDistance = 0;
         let scale = 1;
@@ -39,7 +37,6 @@
                 );
             }
         }
-
         function handleTouchMove(event) {
             if (event.touches.length === 2) {
                 currentPinchDistance = Math.hypot(
@@ -79,7 +76,6 @@
                 // Double tap detected
                 resetZoom();
             }
-
             lastTapTime = currentTime;
         }
 
@@ -87,6 +83,5 @@
             const image = document.getElementById('zoom-image');
             image.style.transform = `scale(${scale})`;
         }
-
     </script>
 {% endblock content %}

@@ -116,3 +116,124 @@
     font-size: 14px;
     font-weight: 500;
 }
+
+/* ------------------------------------------------------------------- Profile Creation --------------------------- */
+
+.app #createProfileContainer{
+    background: url('prof_bg2.jpg');
+    background-size: cover;
+    background-position:-18px center;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    flex-direction: column;    
+}
+.app #createProfileContainer #headerProfCreation{
+    color: white;
+    margin: 40px 0;
+}
+
+.app #createProfileContainer form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 20px;
+    border-radius: 10px;
+
+    backdrop-filter: blur(1px) saturate(176%);
+    -webkit-backdrop-filter: blur(1px) saturate(176%);
+    background-color: rgba(255, 255, 255, 0.556);
+    border-radius: 12px;
+    border: 1px solid rgba(209, 213, 219, 0.52);
+}
+
+.app #createProfileContainer form #profileImg10{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.app #createProfileContainer form #profileImg10 img{
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.489);
+    object-fit:cover;
+}
+
+.app #createProfileContainer form #profileImg10 input{
+    display: none;
+}
+
+.app #createProfileContainer form #profileImg10 #a_plus_sign{
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: azure;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.app #createProfileContainer form #profilebio10 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-bottom: 30px;
+}
+.app #createProfileContainer form #profilebio10 span{
+    color: rgb(73, 73, 73);
+    font-size: 15px;
+    margin-bottom: 5px;
+}
+
+.app #createProfileContainer form #profilebio10 textarea{
+    width: 200px;
+    height: 80px;
+    border-radius: 10px;
+    outline: none;
+    border: 1px rgba(209, 213, 219, 0.311);
+    background-color: #dde2d07f;
+    color: black;
+    resize: none;
+}
+
+.app #createProfileContainer form #profilelocation10 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-bottom: 30px;
+}
+.app #createProfileContainer form #profilelocation10 span{
+    color: rgb(73, 73, 73);
+    font-size: 15px;
+    margin-bottom: 5px;
+}
+
+.app #createProfileContainer form #profilelocation10 input{
+    height: 25px;
+    border-radius: 5px;
+    border: 1px rgba(209, 213, 219, 0.311);
+    color: black;
+    background-color: #d0e1e27f;
+    outline: none;
+    width: 200px;
+}
+
+.app #createProfileContainer form #id_profile10submit{
+    outline: none;
+    border: none;
+    background-color: rgb(128, 252, 252);
+    padding: 5px 20px;
+    border-radius: 8px;
+}
