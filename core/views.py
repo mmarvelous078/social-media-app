@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 
 from django.contrib.auth.models import User
@@ -180,21 +180,34 @@ def delete_post(request, post_id):
 
 # PROFILE USER -------------------------------------------------------------------------------PROFILE USER-----------------------------------------
 @login_required(login_url='core:login')
-def profile(request, pk):
-    user_profile = Profile.objects.get(user=pk)
+def Editprofile(request):
+    user = request.user  # Assuming the user is authenticated
 
-    context = {'user_profile':user_profile}
+    # Retrieve the user's profile data
+    profile = get_object_or_404(Profile, user=user)
 
-    return render(request, 'core/profile.html', context)
+    if request.method == "POST":
+        # Handle form submission
+        profile_picture = request.FILES.get('profile_picture')
+        bio = request.POST.get('bio')
+        location = request.POST.get('location')
 
-@login_required(login_url='core:login')
-def profile_edit(request, pk):
+        # Update the existing profile data
+        profile.user = user
+        profile.profile_picture = profile_picture
+        profile.bio = bio
+        profile.location = location
+        profile.save()
 
-    pass
+        url = reverse('core:posterprofile', kwargs={'pk':user.id})
 
-
-
-
+        return redirect(url)  # Redirect to the profile view page
+    else:
+        # Pre-fill the form with the existing data
+        initial_data = {'profile_picture':profile.profile_picture.url, 'bio': profile.bio, 'location': profile.location}
+    
+    return render(request, 'core/editProfile.html', {'initial_data': initial_data})
+# ---------------------------------------------------------------------------------------------------------------------------------- POSTER PROFILE ------------------
 # viewing a post owner profile
 @login_required(login_url='core:login')
 def posterProfile(request, pk):

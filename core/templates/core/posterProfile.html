@@ -85,7 +85,7 @@
         
         <div id="followCont" class="underBiobuttons">
             {% if request.user.id == poster.user.id %}
-                <button class="messagebtn" style="margin-right: 10px;">Edit profile</button>
+                <a href="{% url 'core:Editprofile' %}" style="text-decoration: none; color: black;"><button class="messagebtn" style="margin-right: 10px;">Edit profile</button></a>
                 <a href="{% url 'core:logout' %}"><button class="messagebtn">Log Out</button></a>
             
             {% else %}
