@@ -8,7 +8,7 @@ from django.dispatch import receiver
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, blank=True)
-    profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
+    profile_picture = models.ImageField(upload_to='profile_pictures/', default='default/default_image.png')
     location = models.CharField(max_length=100, blank=True)
     verified = models.BooleanField(default=False)
 
@@ -19,7 +19,7 @@ class ThreadsContent(models.Model):
     content = models.TextField(blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    content_img = models.ImageField(upload_to='content_images/', blank=True, null=True)
+    content_img = models.ImageField(upload_to='content_images/',  blank=True, null=True)
     content_video = models.FileField(upload_to='content_videos/', blank=True, null=True)
     no_of_likes = models.IntegerField(default=0)
     no_of_comments = models.IntegerField(default=0)

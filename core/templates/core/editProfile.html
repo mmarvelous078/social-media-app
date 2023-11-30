@@ -26,7 +26,7 @@
                 <span>Your Location</span>
                 <input type="text" name="location" id="id_location" maxlength="50" value="{{ initial_data.location }}">
             </div>
-            <input type="submit" value="Save Changes" id="id_profile10submit">
+            <input type="submit" value="Save Changes" id="id_profile10submit" disabled>
         </form>
     </div>
 
@@ -34,6 +34,14 @@
         document.getElementById('a_plus_sign').addEventListener('click', ()=>{
             document.getElementById('id_profile_picture').click();
         });
+
+        // Function to enable or disable the submit button based on file input status
+        function toggleSubmitButton() {
+            const fileInput = document.getElementById('id_profile_picture');
+            const submitButton = document.getElementById('id_profile10submit');
+
+            submitButton.disabled = !fileInput.value; // Disable the button if no file is selected
+        }        
 
         // image preview
         function previewImage(event) {
@@ -50,9 +58,15 @@
                 };
 
                 reader.readAsDataURL(file);
+                
+                // Enable the submit button when a file is selected
+                toggleSubmitButton();
             } else {
                 preview.src = ''; // Clear the preview if no file is selected
             }
-        }        
+        }
+
+        // Listen for changes in the file input to update the submit button status
+        document.getElementById('id_profile_picture').addEventListener('input', toggleSubmitButton);        
     </script>
 {% endblock content %}

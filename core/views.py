@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 
 from django.contrib import messages
 
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 
 from .models import Profile,ThreadsContent , LikesFor_Main_Post, FollowersManager, Replies, Likes_for_Replies
@@ -14,13 +13,14 @@ from .forms import CreateUserForm, ThreadsContentForm, ProfileForm
 from django.contrib.auth.decorators import login_required
 
 import random
+import os
 
 # AUTHENTIOCATION AND AUTHORIZATIONS -------------------------------------------------------------AUTHENTIOCATION AND AUTHORIZATIONS-----------------------------------------------------------
 def registerPage(request):
     form = CreateUserForm()
 
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
             user = form.cleaned_data.get('username')
@@ -188,6 +188,12 @@ def Editprofile(request):
 
     if request.method == "POST":
         # Handle form submission
+
+        old_profile_picture = profile.profile_picture
+        if old_profile_picture:
+                file_path = old_profile_picture.path
+                os.remove(file_path)            
+
         profile_picture = request.FILES.get('profile_picture')
         bio = request.POST.get('bio')
         location = request.POST.get('location')
