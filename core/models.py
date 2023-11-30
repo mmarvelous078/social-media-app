@@ -38,8 +38,6 @@ def delete_post_image(sender, instance, **kwargs):
 
 
 
-
-
 class LikesFor_Main_Post(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     value = models.BooleanField(default=False)
