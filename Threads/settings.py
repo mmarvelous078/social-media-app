@@ -1,3 +1,9 @@
+
+# DEPLOYMENT SECT #
+
+import dj_database_url
+
+# DEPLOYMENT SECT #
 from pathlib import Path
 import os
 
@@ -8,13 +14,26 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
+
+#                                                                                            DEPLOYMENT
+SECRET_KEY = os.environ.get("SECRET_KEY")
+#                                                                                            DEPLOYMENT
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-_b7u_4!nge9)qc)z*sxt+pi&kyt&-pvw-0r)+!jfkuco3kvdv)'
+# SECRET_KEY = 'django-insecure-_b7u_4!nge9)qc)z*sxt+pi&kyt&-pvw-0r)+!jfkuco3kvdv)'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+#                                                                                            DEPLOYMENT  
+DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
+#                                                                                            DEPLOYMENT                           
 
-ALLOWED_HOSTS = []
+# # SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG = True
+
+#                                                                                            DEPLOYMENT
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
+#                                                                                            DEPLOYMENT 
+
+# ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -71,6 +90,14 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+#                                                                                                                        DEPLOYMENT SECTION                                        #
+database_url = os.environ.get("DATABASE_URL")
+DATABASES["default"] = dj_database_url.parse(database_url)
+
+#postgres://o2_db_uj5m_user:ZMqyYevTf3plh1R6DFhhEtIaHB5WLvPG@dpg-cll0susjtl8s73f51hcg-a.oregon-postgres.render.com/o2_db_uj5m
+
+#                                                                                                                         DEPLOYMENT SECTION                                        #
 
 
 # Password validation
