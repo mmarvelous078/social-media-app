@@ -11,6 +11,7 @@ from .models import Profile,ThreadsContent , LikesFor_Main_Post, FollowersManage
 from .forms import CreateUserForm, ThreadsContentForm, ProfileForm
 
 from django.contrib.auth.decorators import login_required
+from django.db.models.functions import Rand
 
 import random
 import os
@@ -78,38 +79,35 @@ def logoutUser(request):
 
 @login_required(login_url='core:login')
 def index(request):
-    # Fetching a random set of users
-    random_users = random.sample(list(Profile.objects.all()), 5)
+    # Fetching a random set of 5 profiles
+    random_profiles = Profile.objects.all().order_by(Rand())[:5]
 
     # Fetching posts for each selected user
     all_posts = []
-    for user in random_users:
+    for user in random_profiles:
         user_posts = ThreadsContent.objects.filter(user=user)[:4]
         all_posts.extend(user_posts)
 
-    
     # Shuffle the combined list of posts
-    posts = list(all_posts)
-    random.shuffle(posts)
+    random.shuffle(all_posts)
 
-    # getting current user's profile picture
-    user = request.user.id
-    profile = Profile.objects.get(user=user)
+    # Getting current user's profile picture
+    user_id = request.user.id
+    profile = Profile.objects.get(user=user_id)
     profImg = profile.profile_picture.url
 
-    # getting all the posts liked by the current user
+    # Getting all the posts liked by the current user
     liking = LikesFor_Main_Post.objects.filter(user=profile).values_list('tweet', flat=True)
 
-    # getting the like counts for each post to be displayed frontend
+    # Getting the like counts for each post to be displayed on the frontend
     like_counts = {}
-    for post in posts:
+    for post in all_posts:
         like_count = LikesFor_Main_Post.objects.filter(tweet=post).count()
         like_counts[post.id] = like_count
 
-    context = {'posts':posts[:15], 'liking':liking, 'like_counts' : like_counts, 'currentUserProfImg':profImg}
+    context = {'posts': all_posts[:15], 'liking': liking, 'like_counts': like_counts, 'currentUserProfImg': profImg}
 
-    return render(request,'core/index.html', context)
-
+    return render(request, 'core/index.html', context)
 
 
 # Getting owner username of the clicked home option btn
