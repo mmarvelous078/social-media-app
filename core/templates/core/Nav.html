@@ -2,9 +2,9 @@
 <nav>
     <div class="navbar">
         <a href="/"><img src="{% static 'svg/house-solid.svg' %}"></a>
-        <a href=""><img src="{% static 'svg/magnifying-glass-solid.svg' %}"></a>
+        <!-- <a href=""><img src="{% static 'svg/magnifying-glass-solid.svg' %}"></a> -->
         <a href="{% url 'core:createPost' %}"><img src="{% static 'svg/pen-to-square-solid.svg' %}"></a>
-        <a href=""><img src="{% static 'svg/heart-solid.svg' %}"></a>
+        <!-- <a href=""><img src="{% static 'svg/heart-solid.svg' %}"></a> -->
 
         <a href="{% url 'core:posterprofile' request.user.id %}"><img src="{% static 'svg/user-solid.svg' %}"></a>
     </div>

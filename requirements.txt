@@ -1,0 +1,10 @@
+asgiref==3.7.2
+dj-database-url==2.1.0
+Django==3.2.23
+django-extensions==3.2.3
+django-filter==23.3
+Pillow==9.5.0
+sqlparse==0.4.4
+psycopg2==2.9.9
+gunicorn==21.2.0
+whitenoise==6.6.0

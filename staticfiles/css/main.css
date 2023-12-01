@@ -1,0 +1,856 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+
+body{
+    margin: 0;
+    padding: 0;
+    background-color: #bfbfbf;
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    align-items: center;
+    color: rgb(0, 0, 0);
+    font-family: 'Poppins', sans-serif;
+}
+
+.logo-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+}
+
+.logo-tag {
+    width: 40px;
+}
+
+.app {
+    position: relative;
+    /* height: 852px;
+    width: 393px; */
+    height: 100vh;
+    width: 100vw;
+    border-radius: 30px;
+    background-color: #ffffff;
+    padding: 0;
+    overflow-y: scroll;
+    transition: 1s ease-in-out;
+}
+
+
+@media (min-width: 600px) {
+    .app{
+        width: 400px;
+    }
+}
+
+.app::-webkit-scrollbar {
+    display: none;
+}
+
+.frontContainer {
+    height: 94%;
+    overflow-y: scroll;
+}
+.frontContainer::-webkit-scrollbar {
+    display: none;
+}
+
+.feed .post-container {
+    display: flex;
+    flex-direction: row;
+    padding: 15px;
+    width: 90%;
+    position: relative;
+}
+
+.feed .post-container .profile-img img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 6px;
+}
+.feed .post-container .post-contents {
+    width: auto;
+}
+
+.feed .post-container .post-contents p{
+    margin: 0;
+    padding: 0;
+}
+
+.feed .post-container .post-contents .post-owner-username{
+    font-weight: 700;
+    font-size: 16px;
+    display: inline-block;
+}
+
+.feed .post-container .post-contents .post-content {
+    font-size: 16px;
+    font-weight: 400;
+    font-size: 13px;
+    margin-top: 5px;
+    line-height: 15px;
+}
+
+.feed .post-container .post-contents .post-content .post-contents-ownerdata{
+    display: flex;
+    flex-direction: row;
+    position: relative;
+}
+
+#post-right-side{
+    display: inline-block;
+    position: absolute;
+    right: 12px;
+}
+
+#post-right-side #dateposted {
+    font-family: sans-serif;
+    font-size: small;
+    color: rgba(154, 154, 154, 0.972);
+    padding-top: 10px;
+    margin-right: 8px;
+}
+
+#post-content-middle {
+    margin-top: 5px;
+}
+
+.post-image-container {
+    max-width: 250px;
+    border-radius: 8px;
+    margin: 10px 0;
+    border: 1px solid rgba(222, 200, 197, 0.412);
+    padding: 3px;
+}
+.post-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 5px 6px 20px #4c392e3b;
+}
+
+.post-video-container {
+    max-width: 200px;
+    border-radius: 8px;
+    margin: 10px;
+    margin-top: 30px;
+    border: 1px solid rgba(222, 200, 197, 0.719);
+}
+.post-video {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+}
+
+
+.button-controls {
+    margin-left: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.button-controls a img {
+    width: 15px;
+    padding: 5px 8px;
+}
+
+.line-post {
+    background-color: rgba(192, 192, 192, 0.583);
+}
+
+nav .navbar{
+    position: absolute;
+    display: flex;
+    height: 50px;
+    width: 100%;
+    bottom: 0;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #dde2d0;
+}
+
+nav .navbar a img {
+    width: 20px;
+}
+
+
+.options {
+    display: none;
+    background-color: rgb(0, 0, 0);
+    height:auto ;
+    width: 60%;
+    position: sticky;
+    bottom: 0;
+    z-index: 999;
+    transition: 1s ease-in-out;
+    border-radius: 10px;
+    padding: 8px 10px;
+}
+
+.options a {
+    color: white;
+    text-decoration: none;
+    padding: 8px;
+}
+
+
+/*                                            POSTER PROFILE                                        */
+
+.app #confirmDeletionModal {
+    width: 250px;
+    position: absolute;
+    top: -150px;
+    
+    z-index: 999;
+    left: 20%;
+
+    flex-direction: column;
+    padding: 0 10px;
+
+    backdrop-filter: blur(10px) saturate(176%);
+    -webkit-backdrop-filter: blur(10px) saturate(176%);
+    background-color: rgba(124, 114, 85, 0.21);
+    border-radius: 12px;
+    border: 1px solid rgba(209, 213, 219, 0.3);
+    justify-content: center;
+    transition: 0.45s ease-in-out, display 0.2s;
+}
+.app #confirmDeletionModal.visible{
+    display: flex;
+    top: 5px;
+}
+.app #confirmDeletionModal div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.app #confirmDeletionModal div button:first-child {
+    background-color: rgba(51, 255, 116, 0.702);
+    color: rgb(0, 0, 0);
+    border: none;
+    border-radius: 5px;
+    padding: 5px 20px;
+    margin-right: 2px;
+    cursor: pointer;
+}
+.app #confirmDeletionModal div button:last-child {
+    background-color: rgba(255, 51, 51, 0.702);
+    color: rgb(0, 0, 0);
+    border: none;
+    border-radius: 5px;
+    padding: 5px 20px;
+    cursor: pointer;
+}
+
+.app #posterProfileNav {
+    padding: 20px 0;
+    width: 100%;
+    box-shadow: 5px 5px 20px rgba(0,0,0,0.06);
+    display: flex;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 990;
+    background-color: #dde2d0;
+}
+#posterProfileNav #arrowAndusername {
+    padding: 0 20px;
+}
+
+#posterProfileNav #arrowAndusername #arrowLeft {
+    margin-right: 10px;
+    font-weight: 600;
+}
+
+#posterProfileNav #arrowAndusername #navUsername {
+    font-weight: 600;
+}
+
+.profile-image img{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 6px;
+}
+
+
+.app #undeNav {
+    margin: 20px 0 5px 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+#undeNav #dataCountProfileContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+#undeNav .rightSideProfile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-right: 40px;
+}
+
+#undeNav .rightSideProfile span:first-child{
+    font-weight: 600;
+    font-size: 14px;
+}
+
+#undeNav .rightSideProfile span:last-child {
+    font-size: 14px;
+}
+
+.app #secondSectionUnderNav{
+    padding: 0 20px;
+}
+
+.app #secondSectionUnderNav #fullname {
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 5px;
+}
+.app #secondSectionUnderNav #bio {
+    width: 130px;
+}
+
+.app #secondSectionUnderNav #bio p {
+    font-size: 14px;
+    color: rgb(47, 47, 47);
+    margin: 0;
+}
+
+.app #secondSectionUnderNav #bio #location {
+    margin-top: 8px;
+}
+
+.app #secondSectionUnderNav #bio #location span {
+    font-size: 14px;
+}
+
+
+/* ------------------------------ Follow button ------------------------------- */
+
+.app .underBiobuttons {
+    margin: 10px 20px 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 18px;
+}
+
+.app .underBiobuttons button{
+    width: 150px;
+    height: 25px;
+    border: none;
+    border-radius: 12px;
+    color: #ffffff;
+    cursor: pointer;
+}
+.app .underBiobuttons a button{
+    width: 150px;
+    height: 25px;
+    border: none;
+    border-radius: 12px;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.app .underBiobuttons .toggle-follow-btn {
+    margin-right: 10px;
+    background-color: #158bbe;
+    cursor: pointer;
+    transition: 0.45s;
+}
+
+.app .underBiobuttons .followingProfilebtn {
+    background-color: #dfdfdf;
+    color: #000;
+}
+
+.app .underBiobuttons .messagebtn {
+    background-color: #dfdfdf;
+    color: #000;
+    font-weight: 500;
+}
+
+
+/* ------------------------------ Follow button end ------------------------------- */
+
+/*                                            Profile posts                                       */
+
+
+.app #ProfilePostsWindow {
+    height: 87%;
+    overflow-y: scroll;
+}
+.app #ProfilePostsWindow::-webkit-scrollbar{
+    display: none;
+}
+
+.app .ProfilePostsContainer {
+    margin: 2px;
+    border-radius: 8px;
+    background: transparent;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+}
+
+.app .ProfilePostsContainer .innerPostContainers {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+.app .ProfilePostsContainer .innerPostContainers .innerPostImageCont{
+    height: 300px;
+    width: 100%;
+    position: relative;
+}
+.app .ProfilePostsContainer .innerPostContainers .innerPostImageCont a img, video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+/* ------------------------------------------------------------------------------ Image Full View -------------------------------------------------------------------- */
+
+.app #ImageFullViewContainer {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #3f3f3f;
+    position: relative;
+}
+
+.app #ImageFullViewContainer #inLogo{
+    top: 20px;
+    position: absolute;
+    right: 50%;
+    transform: translateX(50%)
+}
+
+.app #ImageFullViewContainer a{
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.app #ImageFullViewContainer a span{
+    font-weight: 900;
+}
+
+.app #ImageFullViewContainer img{
+    width: 100%;
+    object-fit: contain;
+    transition: transform 0.3s ease-out;
+}
+
+
+/*                                                                                          modal deletee */
+.app .ProfilePostsContainer .innerPostContainers .deleteButtonModal {
+    position: absolute;
+    top: 8px;
+    right: 20px;
+
+
+    backdrop-filter: blur(10px) saturate(176%);
+    -webkit-backdrop-filter: blur(10px) saturate(176%);
+    background-color: rgba(124, 114, 85, 0.21);
+    border-radius: 12px;
+    border: 1px solid rgba(209, 213, 219, 0.3);
+
+    width: 90px;
+    display: none;
+    align-items: center;
+    border-radius: 6px;
+    justify-content: center;
+    flex-direction: column-reverse;
+    height: 60px;
+}
+.app .ProfilePostsContainer .innerPostContainers .deleteButtonModal span {
+    width: 100%;
+    background-color: rgb(234, 106, 106);
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.app .ProfilePostsContainer .innerPostContainers .deleteButtonModal button {
+    width: 100%;
+    background-color: rgb(133, 234, 133);
+    border: none;
+    padding: 5px 0;
+    margin-bottom: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.app .ProfilePostsContainer .innerPostContainers .delete_option_button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background-color: rgba(52, 52, 52, 0.689);
+    border-radius: 50%;
+    padding: 0 5px;
+}
+.app .ProfilePostsContainer .innerPostContainers .delete_option_button a{
+    text-decoration: none;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+
+.app .ProfilePostsContainer .innerPostContainers .likeComentShareBtns {
+    padding: 5px;
+    width: 88%;
+    /* margin-left: 20px;
+    margin-top: 8px; */
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background-color: #bfbfbf93;
+    padding-bottom: 3px;
+}
+
+.app .ProfilePostsContainer .innerPostContainers .likeComentShareBtns img{
+    width: 18px;
+}
+
+.app .ProfilePostsContainer .innerPostContainers .likeComentShareBtns span {
+    font-size: 12px;
+    color: whitesmoke;
+}
+/* ----------------------------------------------Create a post ----------------------------- */
+
+.app #postNav {
+    display: flex;
+    height: 30px;
+    justify-content: flex-start;
+    padding: 20px 0 0 20px;
+    align-items: center;
+}
+.app #postNav a {
+    text-decoration: none;
+    color: #000;
+    font-size: large;
+    margin-right: 15px;
+}
+
+.app #postNav span{
+    font-weight: 600;
+}
+
+.postingContainer {
+    display: flex;
+    flex-direction: row;
+    padding: 5px 10px;
+}
+
+.postingContainer .profileImageContanainer{
+    display: inline-block;
+}
+
+.postingContainer .profileImageContanainer img{
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    margin-top: 8px;
+}
+
+.postingContainer .postDetailsContainer {
+    width: 50%;
+    padding-left: 10px;
+}
+
+.postingContainer .postDetailsContainer span {
+    font-weight: 600;
+    font-size: 14px;
+}
+.postingContainer .postDetailsContainer .formContainer form #contentInput{
+    border: none;
+    outline: none;
+    caret-color: #67554b;
+}
+
+.postingContainer .postDetailsContainer .formContainer form #postButton{
+    background-color: #98857a;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    width: 60px;
+    color: white;
+    align-items: center;
+    padding: 5px 8px;
+    font-weight: bold;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+/* -----------------------------------------------Replies ----------- */
+
+
+.app #repliesOuterContainer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 0;
+    background-color: #f4f3ef;
+    z-index: 100;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+    transition: height 0.45s ease-in-out, display 1s;
+    display: none;
+}
+.app #repliesOuterContainer #repliesHeader{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.app #repliesOuterContainer #repliesHeader #notch {
+    width: 25px;
+    height: 8px;
+    border-radius: 5px;
+    background-color: rgb(126, 126, 126);
+    margin-bottom: 12px;
+    cursor: pointer;
+}
+
+.app #repliesOuterContainer #repliesHeader span{
+    font-weight: 600;
+}
+
+.app #repliesOuterContainer #underlineReplies{
+    width: 100%;
+    height: 1px;
+    background-color: rgb(85, 85, 85);
+}
+
+.app #repliesOuterContainer #allContentReplies{
+    width: 100%;
+    height: 78%;
+    overflow: scroll;
+}
+.app #repliesOuterContainer #allContentReplies::-webkit-scrollbar{
+    display: none;
+}
+.app #repliesOuterContainer .replyContainerIndv {
+    width: 95%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    padding: 5px 10px;
+    padding-top: 8px;
+    position: relative;
+    background-color:rgb(233 231 229 / 87%);
+    border-radius: 0 40px 0 40px;
+    margin: 7px 0;
+}
+
+.app #repliesOuterContainer .replyContainerIndv .replyAuthorProfileImg{
+    width: 35px;
+    height: 100%;
+}
+
+.app #repliesOuterContainer .replyContainerIndv .replyAuthorProfileImg img{
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+}
+
+.app #repliesOuterContainer .replyContainerIndv .replyContents {
+    margin-left: 10px;
+}
+
+.app #repliesOuterContainer .replyContainerIndv .replyContents span {
+    font-size: 13px;
+}
+.app #repliesOuterContainer .replyContainerIndv .replyContents p {
+    margin: 8px 0;
+    padding: 0;
+    font-size: 14px;
+}
+.app #repliesOuterContainer .replyContainerIndv .ReplylikeIconContainer {
+    position: absolute;
+    right: 15px;
+    top: 20px;
+}
+
+.app #repliesOuterContainer .replyContainerIndv .ReplylikeIconContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.app #repliesOuterContainer .replyContainerIndv .ReplylikeIconContainer img {
+    width: 14px;
+    cursor: pointer;
+}
+
+.app #repliesOuterContainer .replyContainerIndv .ReplylikeIconContainer span {
+    font-size: 12px;
+}
+.app #repliesOuterContainer #ReplyInputContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 20px;
+}
+.app #repliesOuterContainer #ReplyInputContainer #senderReplyImg img{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.app #repliesOuterContainer #ReplyInputContainer #ReplyInputForm input{
+    outline: none;
+    border: none;
+    width: 70%;
+    height: 40px;
+    background-color: #f4f3ef;
+}
+
+.app #repliesOuterContainer #ReplyInputContainer #ReplyInputForm button {
+    background-color: #353535;
+    border: none;
+    width: 40px;
+    height: 30px;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+
+
+/*                                    Authentication                                   */
+
+.app .authentication_container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url("login.jpg");
+    background-size: cover;
+    background-position: 10% top;
+    flex-direction: column;
+}
+
+.app .authentication_container .logForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 20px;
+    border-radius: 10px;
+
+    backdrop-filter: blur(1px) saturate(176%);
+    -webkit-backdrop-filter: blur(1px) saturate(176%);
+    background-color: rgba(255, 255, 255, 0.21);
+    border-radius: 12px;
+    border: 1px solid rgba(209, 213, 219, 0.3);
+
+    margin-bottom: 50px;
+}
+.app .authentication_container .auth_container_inner p{
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffea00;
+    width: 85%;
+}
+.app .authentication_container .auth_container_inner h2{
+    color: #ffea00;
+}
+
+.app .authentication_container .auth_container_inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px 30px;
+    border-radius: 10px;
+
+    backdrop-filter: blur(2px) saturate(176%);
+    -webkit-backdrop-filter: blur(2px) saturate(176%);
+    background-color: rgba(255, 255, 255, 0.21);
+    border-radius: 12px;
+    border: 1px solid rgba(209, 213, 219, 0.3);
+}
+
+.app .authentication_container .auth_container_inner .id_registration_form{
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    width: 100%;
+}
+.app .authentication_container .auth_container_inner .id_registration_form input{
+   margin: 10px 0;
+   height: 30px;
+   border: none;
+   outline: none;
+   background-color: rgba(255, 255, 255, 0.479);
+   border-radius: 5px;
+   color: rgb(255, 255, 255);
+}
+.app .authentication_container .auth_container_inner .id_registration_form .submitRegisterForm {
+    background-color: #915839;
+    color: #e67e22;
+    font-weight: 700;
+    padding: 6px 16px;
+    border: 1px solid rgb(248, 202, 162);
+    font-size: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.app .authentication_container .auth_container_inner p a{
+    text-decoration: underline;
+    color: rgb(81, 255, 0);
+    cursor: pointer;
+}
+
+.app .authentication_container .auth_container_inner ul,li{
+    text-decoration: none;
+    font-size: 12px;
+    color: rgb(255, 0, 0);
+    margin: 0;
+    padding: 0%;
+}
+
+.app .authentication_container .auth_container_inner  #usercreatedMessage {
+    color: green;
+    font-size: 12px;
+    background-color: rgba(255, 255, 255, 0.479);
+    border-radius: 5px;
+    padding: 20px;
+}
+
+.app .authentication_container .auth_container_inner .id_registration_form .submitRegisterForm:active{
+    opacity: 0.5;
+}

@@ -11,6 +11,7 @@ from .models import Profile,ThreadsContent , LikesFor_Main_Post, FollowersManage
 from .forms import CreateUserForm, ThreadsContentForm, ProfileForm
 
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 
 import random
 import os
@@ -78,37 +79,49 @@ def logoutUser(request):
 
 @login_required(login_url='core:login')
 def index(request):
-    # Fetching a random set of users
-    random_users = random.sample(list(Profile.objects.all()), 5)
+    # Getting the current user's profile
+    user = request.user
+    profile = Profile.objects.get(user=user)
 
-    # Fetching posts for each selected user
-    all_posts = []
-    for user in random_users:
-        user_posts = ThreadsContent.objects.filter(user=user)[:4]
-        all_posts.extend(user_posts)
+    # Fetch profiles of users followed by the current user using the FollowersManager model
+    followed_users = FollowersManager.objects.filter(follower=profile).values_list('followed', flat=True)
 
-    
+    # Fetch posts from the followed users
+    followed_posts = ThreadsContent.objects.filter(user__in=followed_users)[:5]
+
+    # Fetch a random set of 10 posts from the database
+    random_posts = ThreadsContent.objects.exclude(user__in=followed_users).order_by('?')[:10]
+
+    # Combine followed posts with random posts
+    posts = list(followed_posts) + list(random_posts)
+
     # Shuffle the combined list of posts
-    posts = list(all_posts)
     random.shuffle(posts)
 
-    # getting current user's profile picture
-    user = request.user.id
-    profile = Profile.objects.get(user=user)
+    # Getting current user's profile picture
     profImg = profile.profile_picture.url
 
-    # getting all the posts liked by the current user
+    # Getting all the posts liked by the current user
     liking = LikesFor_Main_Post.objects.filter(user=profile).values_list('tweet', flat=True)
 
-    # getting the like counts for each post to be displayed frontend
-    like_counts = {}
-    for post in posts:
-        like_count = LikesFor_Main_Post.objects.filter(tweet=post).count()
-        like_counts[post.id] = like_count
+    # Getting the like counts for each post to be displayed frontend
+    like_counts = (
+        LikesFor_Main_Post.objects.filter(tweet__in=posts)
+        .values('tweet')
+        .annotate(like_count=Count('id'))
+    )
 
-    context = {'posts':posts[:15], 'liking':liking, 'like_counts' : like_counts, 'currentUserProfImg':profImg}
+    # Create a dictionary to store the like counts for each post
+    like_counts_dict = {item['tweet']: item['like_count'] for item in like_counts}
 
-    return render(request,'core/index.html', context)
+    context = {
+        'posts': posts[:15],
+        'liking': liking,
+        'like_counts': like_counts_dict,
+        'currentUserProfImg': profImg
+    }
+
+    return render(request, 'core/index.html', context)
 
 
 
@@ -127,8 +140,6 @@ def HomeOptions(request, pk):
             listdata.append({'ownerId':post.user.user.id})
             print(post.user.user.username)
     
-    print(listdata)
-
     #postAtrs = list(ThreadsContent.objects.values())
 
 
