@@ -11,7 +11,6 @@ from .models import Profile,ThreadsContent , LikesFor_Main_Post, FollowersManage
 from .forms import CreateUserForm, ThreadsContentForm, ProfileForm
 
 from django.contrib.auth.decorators import login_required
-from django.db.models.functions import Rand
 
 import random
 import os
@@ -76,15 +75,21 @@ def logoutUser(request):
 # HOME -------------------------------------------------------------------------------------HOME-----------------------------------
 
 
-
 @login_required(login_url='core:login')
 def index(request):
-    # Fetching a random set of 5 profiles
-    random_profiles = Profile.objects.all().order_by(Rand())[:5]
+    # Fetching all profiles
+    all_profiles = list(Profile.objects.all())
+
+    # Checking if there are enough profiles for sampling
+    if len(all_profiles) >= 5:
+        # Fetching a random set of 5 users
+        random_users = random.sample(all_profiles, 5)
+    else:
+        random_users = all_profiles
 
     # Fetching posts for each selected user
     all_posts = []
-    for user in random_profiles:
+    for user in random_users:
         user_posts = ThreadsContent.objects.filter(user=user)[:4]
         all_posts.extend(user_posts)
 
@@ -92,8 +97,8 @@ def index(request):
     random.shuffle(all_posts)
 
     # Getting current user's profile picture
-    user_id = request.user.id
-    profile = Profile.objects.get(user=user_id)
+    user = request.user.id
+    profile = Profile.objects.get(user=user)
     profImg = profile.profile_picture.url
 
     # Getting all the posts liked by the current user
@@ -108,6 +113,7 @@ def index(request):
     context = {'posts': all_posts[:15], 'liking': liking, 'like_counts': like_counts, 'currentUserProfImg': profImg}
 
     return render(request, 'core/index.html', context)
+
 
 
 # Getting owner username of the clicked home option btn
