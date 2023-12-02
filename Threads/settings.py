@@ -99,6 +99,8 @@ DATABASES["default"] = dj_database_url.parse(database_url)
 
 #                                                                                                                         DEPLOYMENT SECTION                                        #
 
+# DATABASES["default"] = dj_database_url.parse('postgres://o2_db_uj5m_user:ZMqyYevTf3plh1R6DFhhEtIaHB5WLvPG@dpg-cll0susjtl8s73f51hcg-a.oregon-postgres.render.com/o2_db_uj5m')
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
